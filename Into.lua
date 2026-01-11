@@ -1,23 +1,24 @@
 -- Arqel UI Installer
--- Load this file first
+-- Crimson/Red/Black Theme
 
 local genv = getgenv()
 
--- Prevent double execution
 if genv.ArqelKeySystem == true then
     return genv.ArqelLibrary
 end
 
--- Services
 local HttpService = cloneref(game:GetService('HttpService'))
 local TweenService = cloneref(game:GetService('TweenService'))
-local Players = cloneref(game:GetService('Players'))
 local CoreGui = cloneref(game:GetService('CoreGui'))
 
--- Tween Info
+local CrimsonPrimary = Color3.fromRGB(180, 30, 30)
+local CrimsonDark = Color3.fromRGB(120, 20, 30)
+local CrimsonStroke = Color3.fromRGB(113, 61, 80)
+local Black = Color3.fromRGB(5, 5, 5)
+local White = Color3.fromRGB(255, 255, 255)
+
 local AnimInfo = TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
 
--- Create Installer GUI
 local InstallerGui = Instance.new('ScreenGui')
 local Background = Instance.new('Frame')
 local BackgroundFrame = Instance.new('Frame')
@@ -47,14 +48,6 @@ local BackgroundFrameCorner = Instance.new('UICorner')
 local BackgroundLayout = Instance.new('UIListLayout')
 local BackgroundPadding = Instance.new('UIPadding')
 
--- Colors
-local CrimsonPrimary = Color3.fromRGB(180, 30, 30)
-local CrimsonDark = Color3.fromRGB(120, 20, 30)
-local CrimsonStroke = Color3.fromRGB(113, 61, 80)
-local Black = Color3.fromRGB(5, 5, 5)
-local White = Color3.fromRGB(255, 255, 255)
-
--- Setup Installer GUI
 InstallerGui.Name = 'ArqelUIInstaller'
 InstallerGui.Parent = CoreGui
 InstallerGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -170,7 +163,7 @@ IconImage.BackgroundColor3 = White
 IconImage.BackgroundTransparency = 1
 IconImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
 IconImage.BorderSizePixel = 0
-IconImage.Position = UDim2.new(0.235294119, 0, 0.274509817, 0)
+IconImage.Position = UDim2.new(0.5, -15, 0.5, -15)
 IconImage.Size = UDim2.new(0, 30, 0, 30)
 IconImage.Image = 'rbxassetid://122944092730557'
 
@@ -235,10 +228,9 @@ BackgroundLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 BackgroundPadding.Parent = Background
 BackgroundPadding.PaddingBottom = UDim.new(0, -75)
 
--- Pulse Animation for loading dot
 local pulseUp = true
 task.spawn(function()
-    while InstallerGui.Parent ~= nil do
+    while InstallerGui and InstallerGui.Parent do
         local targetTransparency = pulseUp and 0.6 or 0.15
         local pulseTween = TweenService:Create(Animation, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {
             BackgroundTransparency = targetTransparency
@@ -249,23 +241,20 @@ task.spawn(function()
     end
 end)
 
--- Wait before showing
 task.wait(1)
 
--- Slide in animation
 local slideIn = TweenService:Create(BackgroundPadding, AnimInfo, {
     PaddingBottom = UDim.new(0, 15)
 })
 slideIn:Play()
 
--- Step 1: Checking files
 MainTitle.Text = 'Arqel'
 MainDesc.Text = 'Checking files...'
 
 task.wait(0.5)
 
--- Create folders
-local folderSuccess, folderError = pcall(function()
+pcall(function()
+    if not isfolder then return end
     if not isfolder('ArqelLibrary') then
         makefolder('ArqelLibrary')
     end
@@ -277,14 +266,8 @@ local folderSuccess, folderError = pcall(function()
     end
 end)
 
-if not folderSuccess then
-    MainDesc.Text = 'Folder error: ' .. tostring(folderError)
-    task.wait(3)
-end
-
 task.wait(0.3)
 
--- Step 2: Loading icons
 MainDesc.Text = 'Loading icons...'
 
 local NebulaIcons = nil
@@ -303,10 +286,8 @@ end
 
 task.wait(0.3)
 
--- Step 3: Caching assets
 MainDesc.Text = 'Caching assets...'
 
--- Initialize icon cache
 genv.ArqelIcons = {}
 
 if iconsLoaded and NebulaIcons then
@@ -340,7 +321,6 @@ if iconsLoaded and NebulaIcons then
         end
     end
 else
-    -- Fallback - empty icons
     local fallbackList = {"Check", "CheckCircle", "Close", "Key", "Settings", "Info", "AlertTriangle", "AlertCircle", "Copy", "Refresh", "ExternalLink", "XCircle", "Eye", "EyeOff", "Link"}
     for _, name in ipairs(fallbackList) do
         genv.ArqelIcons[name] = ""
@@ -349,29 +329,11 @@ end
 
 task.wait(0.3)
 
--- Step 4: Loading main library
-MainDesc.Text = 'Loading library...'
-
-local LoaderCode = nil
-local loaderSuccess, loaderError = pcall(function()
-    LoaderCode = game:HttpGet("https://raw.githubusercontent.com/Nappypie/glowing-giggle/refs/heads/main/Loa.lua")
-end)
-
-if not loaderSuccess then
-    MainDesc.Text = 'Failed to load library!'
-    task.wait(3)
-    InstallerGui:Destroy()
-    return nil
-end
-
-task.wait(0.3)
-
--- Step 5: Launching
+MainTitle.Text = 'Arqel'
 MainDesc.Text = 'Launching...'
 
 task.wait(0.5)
 
--- Slide out animation
 local slideOut = TweenService:Create(BackgroundPadding, AnimInfo, {
     PaddingBottom = UDim.new(0, -75)
 })
@@ -379,14 +341,13 @@ slideOut:Play()
 
 task.wait(0.8)
 
--- Destroy installer
 InstallerGui:Destroy()
 
--- Load and return the library
-local Library = loadstring(LoaderCode)()
+local LoaderCode = game:HttpGet("https://raw.githubusercontent.com/Nappypie/glowing-giggle/refs/heads/main/Loa.lua")
 
--- Store reference
-genv.ArqelLibrary = Library
 genv.ArqelKeySystem = true
+
+local Library = loadstring(LoaderCode)()
+genv.ArqelLibrary = Library
 
 return Library
