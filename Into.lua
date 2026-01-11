@@ -1,261 +1,392 @@
 -- Arqel UI Installer
--- Crimson/Red/Black Theme
+-- Load this file first
 
-local _callcloneref4 = cloneref(game:GetService('HttpService'))
-local _callcloneref7 = cloneref(game:GetService('TweenService'))
+local genv = getgenv()
 
-cloneref(game:GetService('Players'))
+-- Prevent double execution
+if genv.ArqelKeySystem == true then
+    return genv.ArqelLibrary
+end
 
-local _call16 = TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
+-- Services
+local HttpService = cloneref(game:GetService('HttpService'))
+local TweenService = cloneref(game:GetService('TweenService'))
+local Players = cloneref(game:GetService('Players'))
+local CoreGui = cloneref(game:GetService('CoreGui'))
 
-local _call28 = Instance.new('ScreenGui')
-local _call30 = Instance.new('TextLabel')
-local _call32 = Instance.new('TextLabel')
-local _call34 = Instance.new('ImageLabel')
-local _call36 = Instance.new('Frame')
-local _call38 = Instance.new('Frame')
-local _call40 = Instance.new('Frame')
-local _call42 = Instance.new('Frame')
-local _call44 = Instance.new('UIScale')
-local _call46 = Instance.new('Frame')
-local _call48 = Instance.new('UICorner')
-local _call50 = Instance.new('Frame')
-local _call52 = Instance.new('UIListLayout')
-local _call54 = Instance.new('UIListLayout')
-local _call56 = Instance.new('Frame')
-local _call58 = Instance.new('Frame')
-local _call60 = Instance.new('UIListLayout')
-local _call62 = Instance.new('UICorner')
-local _call64 = Instance.new('UIPadding')
-local _call66 = Instance.new('Frame')
-local _call68 = Instance.new('UICorner')
-local _call70 = Instance.new('UICorner')
-local _call72 = Instance.new('UIListLayout')
-local _call74 = Instance.new('UICorner')
-local _call76 = Instance.new('UIListLayout')
-local _call78 = Instance.new('UIPadding')
-local _call80 = Instance.new('UIStroke')
-local _call82 = Instance.new('UIStroke')
+-- Tween Info
+local AnimInfo = TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
 
-_call28.Parent = game.CoreGui
-_call28.Name = 'ArqelUIInstaller'
-_call28.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-_call28.DisplayOrder = 100
-_call28.IgnoreGuiInset = true
-_call28.ResetOnSpawn = false
+-- Create Installer GUI
+local InstallerGui = Instance.new('ScreenGui')
+local Background = Instance.new('Frame')
+local BackgroundFrame = Instance.new('Frame')
+local BackgroundStroke = Instance.new('UIStroke')
+local BackgroundScale = Instance.new('UIScale')
+local MainFrame = Instance.new('Frame')
+local MainCorner = Instance.new('UICorner')
+local MiddleFrame = Instance.new('Frame')
+local MiddleLayout = Instance.new('UIListLayout')
+local MainTitle = Instance.new('TextLabel')
+local MainDesc = Instance.new('TextLabel')
+local MainLayout = Instance.new('UIListLayout')
+local IconFrame = Instance.new('Frame')
+local IconPadding = Instance.new('UIPadding')
+local Icon = Instance.new('Frame')
+local IconImage = Instance.new('ImageLabel')
+local IconLayout = Instance.new('UIListLayout')
+local IconCorner = Instance.new('UICorner')
+local IconStroke = Instance.new('UIStroke')
+local AnimationMainFrame = Instance.new('Frame')
+local AnimationFrame = Instance.new('Frame')
+local AnimationFrameCorner = Instance.new('UICorner')
+local Animation = Instance.new('Frame')
+local AnimationCorner = Instance.new('UICorner')
+local AnimationLayout = Instance.new('UIListLayout')
+local BackgroundFrameCorner = Instance.new('UICorner')
+local BackgroundLayout = Instance.new('UIListLayout')
+local BackgroundPadding = Instance.new('UIPadding')
 
-_call40.Name = 'Background'
-_call40.Parent = _call28
-_call40.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
-_call40.BackgroundTransparency = 1
-_call40.BorderSizePixel = 0
-_call40.Size = UDim2.new(1, 0, 1, 0)
+-- Colors
+local CrimsonPrimary = Color3.fromRGB(180, 30, 30)
+local CrimsonDark = Color3.fromRGB(120, 20, 30)
+local CrimsonStroke = Color3.fromRGB(113, 61, 80)
+local Black = Color3.fromRGB(5, 5, 5)
+local White = Color3.fromRGB(255, 255, 255)
 
-_call42.Name = 'BackgroundFrame'
-_call42.Parent = _call40
-_call42.BackgroundColor3 = Color3.fromRGB(120, 20, 30)
-_call42.BackgroundTransparency = 0.8
-_call42.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call42.BorderSizePixel = 0
-_call42.Position = UDim2.new(0.354503453, 0, 0.927616954, 0)
-_call42.Size = UDim2.new(0, 280, 0, 65)
+-- Setup Installer GUI
+InstallerGui.Name = 'ArqelUIInstaller'
+InstallerGui.Parent = CoreGui
+InstallerGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+InstallerGui.DisplayOrder = 100
+InstallerGui.IgnoreGuiInset = true
+InstallerGui.ResetOnSpawn = false
 
-_call80.Parent = _call42
-_call80.Color = Color3.fromRGB(180, 30, 30)
-_call80.Transparency = 0.5
-_call80.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Background.Name = 'Background'
+Background.Parent = InstallerGui
+Background.BackgroundColor3 = Black
+Background.BackgroundTransparency = 1
+Background.BorderSizePixel = 0
+Background.Size = UDim2.new(1, 0, 1, 0)
 
-_call44.Parent = _call42
+BackgroundFrame.Name = 'BackgroundFrame'
+BackgroundFrame.Parent = Background
+BackgroundFrame.BackgroundColor3 = CrimsonDark
+BackgroundFrame.BackgroundTransparency = 0.8
+BackgroundFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+BackgroundFrame.BorderSizePixel = 0
+BackgroundFrame.Position = UDim2.new(0.354503453, 0, 0.927616954, 0)
+BackgroundFrame.Size = UDim2.new(0, 280, 0, 65)
 
-_call46.Name = 'MainFrame'
-_call46.Parent = _call42
-_call46.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
-_call46.BackgroundTransparency = 0.3
-_call46.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call46.BorderSizePixel = 0
-_call46.Size = UDim2.new(1, 0, 1, 0)
+BackgroundStroke.Parent = BackgroundFrame
+BackgroundStroke.Color = CrimsonPrimary
+BackgroundStroke.Transparency = 0.5
+BackgroundStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-_call48.CornerRadius = UDim.new(0, 5)
-_call48.Parent = _call46
+BackgroundScale.Parent = BackgroundFrame
 
-_call50.Name = 'MiddleFrame'
-_call50.Parent = _call46
-_call50.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call50.BackgroundTransparency = 1
-_call50.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call50.BorderSizePixel = 0
-_call50.LayoutOrder = 1
-_call50.Position = UDim2.new(0.25, 0, 0, 0)
-_call50.Size = UDim2.new(0.396428585, 70, 1, 0)
+MainFrame.Name = 'MainFrame'
+MainFrame.Parent = BackgroundFrame
+MainFrame.BackgroundColor3 = Black
+MainFrame.BackgroundTransparency = 0.3
+MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 0
+MainFrame.Size = UDim2.new(1, 0, 1, 0)
 
-_call30.Name = 'MainTitle'
-_call30.Parent = _call50
-_call30.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call30.BackgroundTransparency = 1
-_call30.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call30.BorderSizePixel = 0
-_call30.Size = UDim2.new(1, 0, 0, 25)
-_call30.Font = Enum.Font.ArialBold
-_call30.Text = ''
-_call30.TextColor3 = Color3.fromRGB(255, 255, 255)
-_call30.TextSize = 13
-_call30.TextXAlignment = Enum.TextXAlignment.Left
-_call30.TextYAlignment = Enum.TextYAlignment.Bottom
+MainCorner.CornerRadius = UDim.new(0, 5)
+MainCorner.Parent = MainFrame
 
-_call52.Parent = _call50
-_call52.SortOrder = Enum.SortOrder.LayoutOrder
+MiddleFrame.Name = 'MiddleFrame'
+MiddleFrame.Parent = MainFrame
+MiddleFrame.BackgroundColor3 = White
+MiddleFrame.BackgroundTransparency = 1
+MiddleFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MiddleFrame.BorderSizePixel = 0
+MiddleFrame.LayoutOrder = 1
+MiddleFrame.Position = UDim2.new(0.25, 0, 0, 0)
+MiddleFrame.Size = UDim2.new(0.396428585, 70, 1, 0)
 
-_call32.Name = 'MainDesc'
-_call32.Parent = _call50
-_call32.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call32.BackgroundTransparency = 1
-_call32.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call32.BorderSizePixel = 0
-_call32.Size = UDim2.new(1, 0, 0, 34)
-_call32.Font = Enum.Font.ArialBold
-_call32.Text = ''
-_call32.TextColor3 = Color3.fromRGB(255, 255, 255)
-_call32.TextSize = 10
-_call32.TextTransparency = 0.5
-_call32.TextWrapped = true
-_call32.TextXAlignment = Enum.TextXAlignment.Left
-_call32.TextYAlignment = Enum.TextYAlignment.Top
+MainTitle.Name = 'MainTitle'
+MainTitle.Parent = MiddleFrame
+MainTitle.BackgroundColor3 = White
+MainTitle.BackgroundTransparency = 1
+MainTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainTitle.BorderSizePixel = 0
+MainTitle.Size = UDim2.new(1, 0, 0, 25)
+MainTitle.Font = Enum.Font.ArialBold
+MainTitle.Text = ''
+MainTitle.TextColor3 = White
+MainTitle.TextSize = 13
+MainTitle.TextXAlignment = Enum.TextXAlignment.Left
+MainTitle.TextYAlignment = Enum.TextYAlignment.Bottom
 
-_call54.Parent = _call46
-_call54.FillDirection = Enum.FillDirection.Horizontal
-_call54.SortOrder = Enum.SortOrder.LayoutOrder
+MiddleLayout.Parent = MiddleFrame
+MiddleLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-_call56.Name = 'IconFrame'
-_call56.Parent = _call46
-_call56.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call56.BackgroundTransparency = 1
-_call56.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call56.BorderSizePixel = 0
-_call56.Size = UDim2.new(0, 65, 1, 0)
+MainDesc.Name = 'MainDesc'
+MainDesc.Parent = MiddleFrame
+MainDesc.BackgroundColor3 = White
+MainDesc.BackgroundTransparency = 1
+MainDesc.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainDesc.BorderSizePixel = 0
+MainDesc.Size = UDim2.new(1, 0, 0, 34)
+MainDesc.Font = Enum.Font.ArialBold
+MainDesc.Text = ''
+MainDesc.TextColor3 = White
+MainDesc.TextSize = 10
+MainDesc.TextTransparency = 0.5
+MainDesc.TextWrapped = true
+MainDesc.TextXAlignment = Enum.TextXAlignment.Left
+MainDesc.TextYAlignment = Enum.TextYAlignment.Top
 
-_call58.Name = 'Icon'
-_call58.Parent = _call56
-_call58.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
-_call58.BackgroundTransparency = 0.2
-_call58.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call58.BorderSizePixel = 0
-_call58.Size = UDim2.new(1, 0, 1, 0)
+MainLayout.Parent = MainFrame
+MainLayout.FillDirection = Enum.FillDirection.Horizontal
+MainLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-_call82.Parent = _call58
-_call82.Color = Color3.fromRGB(113, 61, 80)
-_call82.Transparency = 0.8
-_call82.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+IconFrame.Name = 'IconFrame'
+IconFrame.Parent = MainFrame
+IconFrame.BackgroundColor3 = White
+IconFrame.BackgroundTransparency = 1
+IconFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+IconFrame.BorderSizePixel = 0
+IconFrame.Size = UDim2.new(0, 65, 1, 0)
 
-_call34.Name = 'ImageIcon'
-_call34.Parent = _call58
-_call34.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call34.BackgroundTransparency = 1
-_call34.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call34.BorderSizePixel = 0
-_call34.Position = UDim2.new(0.235294119, 0, 0.274509817, 0)
-_call34.Size = UDim2.new(0, 30, 0, 30)
-_call34.Image = 'rbxassetid://122944092730557'
+Icon.Name = 'Icon'
+Icon.Parent = IconFrame
+Icon.BackgroundColor3 = CrimsonPrimary
+Icon.BackgroundTransparency = 0.2
+Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Icon.BorderSizePixel = 0
+Icon.Size = UDim2.new(1, 0, 1, 0)
 
-_call60.Parent = _call58
-_call60.HorizontalAlignment = Enum.HorizontalAlignment.Center
-_call60.SortOrder = Enum.SortOrder.LayoutOrder
-_call60.VerticalAlignment = Enum.VerticalAlignment.Center
+IconStroke.Parent = Icon
+IconStroke.Color = CrimsonStroke
+IconStroke.Transparency = 0.8
+IconStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-_call62.Parent = _call58
+IconImage.Name = 'ImageIcon'
+IconImage.Parent = Icon
+IconImage.BackgroundColor3 = White
+IconImage.BackgroundTransparency = 1
+IconImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
+IconImage.BorderSizePixel = 0
+IconImage.Position = UDim2.new(0.235294119, 0, 0.274509817, 0)
+IconImage.Size = UDim2.new(0, 30, 0, 30)
+IconImage.Image = 'rbxassetid://122944092730557'
 
-_call64.Parent = _call56
-_call64.PaddingBottom = UDim.new(0, 7)
-_call64.PaddingLeft = UDim.new(0, 7)
-_call64.PaddingRight = UDim.new(0, 7)
-_call64.PaddingTop = UDim.new(0, 7)
+IconLayout.Parent = Icon
+IconLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+IconLayout.SortOrder = Enum.SortOrder.LayoutOrder
+IconLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 
-_call66.Name = 'AnimationMainFrame'
-_call66.Parent = _call46
-_call66.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-_call66.BackgroundTransparency = 1
-_call66.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call66.BorderSizePixel = 0
-_call66.LayoutOrder = 3
-_call66.Position = UDim2.new(0.896428585, 0, 0, 0)
-_call66.Size = UDim2.new(-0.14642857, 70, 1, 0)
+IconCorner.Parent = Icon
 
-_call36.Name = 'AnimationFrame'
-_call36.Parent = _call66
-_call36.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
-_call36.BackgroundTransparency = 0.15
-_call36.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call36.BorderSizePixel = 0
-_call36.Position = UDim2.new(0.206896558, 0, 0.306569248, 0)
-_call36.Size = UDim2.new(0, 12, 0, 12)
+IconPadding.Parent = IconFrame
+IconPadding.PaddingBottom = UDim.new(0, 7)
+IconPadding.PaddingLeft = UDim.new(0, 7)
+IconPadding.PaddingRight = UDim.new(0, 7)
+IconPadding.PaddingTop = UDim.new(0, 7)
 
-_call68.CornerRadius = UDim.new(1, 0)
-_call68.Parent = _call36
+AnimationMainFrame.Name = 'AnimationMainFrame'
+AnimationMainFrame.Parent = MainFrame
+AnimationMainFrame.BackgroundColor3 = White
+AnimationMainFrame.BackgroundTransparency = 1
+AnimationMainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AnimationMainFrame.BorderSizePixel = 0
+AnimationMainFrame.LayoutOrder = 3
+AnimationMainFrame.Position = UDim2.new(0.896428585, 0, 0, 0)
+AnimationMainFrame.Size = UDim2.new(-0.14642857, 70, 1, 0)
 
-_call38.Name = 'Animation'
-_call38.Parent = _call36
-_call38.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
-_call38.BackgroundTransparency = 0.15
-_call38.BorderColor3 = Color3.fromRGB(0, 0, 0)
-_call38.BorderSizePixel = 0
-_call38.Size = UDim2.new(0, 12, 0, 12)
+AnimationFrame.Name = 'AnimationFrame'
+AnimationFrame.Parent = AnimationMainFrame
+AnimationFrame.BackgroundColor3 = CrimsonPrimary
+AnimationFrame.BackgroundTransparency = 0.15
+AnimationFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AnimationFrame.BorderSizePixel = 0
+AnimationFrame.Position = UDim2.new(0.206896558, 0, 0.306569248, 0)
+AnimationFrame.Size = UDim2.new(0, 12, 0, 12)
 
-_call70.CornerRadius = UDim.new(1, 0)
-_call70.Parent = _call38
+AnimationFrameCorner.CornerRadius = UDim.new(1, 0)
+AnimationFrameCorner.Parent = AnimationFrame
 
-_call72.Parent = _call66
-_call72.SortOrder = Enum.SortOrder.LayoutOrder
-_call72.VerticalAlignment = Enum.VerticalAlignment.Center
+Animation.Name = 'Animation'
+Animation.Parent = AnimationFrame
+Animation.BackgroundColor3 = CrimsonPrimary
+Animation.BackgroundTransparency = 0.15
+Animation.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Animation.BorderSizePixel = 0
+Animation.Size = UDim2.new(0, 12, 0, 12)
 
-_call74.CornerRadius = UDim.new(0, 5)
-_call74.Parent = _call42
+AnimationCorner.CornerRadius = UDim.new(1, 0)
+AnimationCorner.Parent = Animation
 
-_call76.Parent = _call40
-_call76.HorizontalAlignment = Enum.HorizontalAlignment.Center
-_call76.SortOrder = Enum.SortOrder.LayoutOrder
-_call76.VerticalAlignment = Enum.VerticalAlignment.Bottom
+AnimationLayout.Parent = AnimationMainFrame
+AnimationLayout.SortOrder = Enum.SortOrder.LayoutOrder
+AnimationLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 
-_call78.Parent = _call40
-_call78.PaddingBottom = UDim.new(0, -75)
+BackgroundFrameCorner.CornerRadius = UDim.new(0, 5)
+BackgroundFrameCorner.Parent = BackgroundFrame
 
-task.wait(2)
+BackgroundLayout.Parent = Background
+BackgroundLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+BackgroundLayout.SortOrder = Enum.SortOrder.LayoutOrder
+BackgroundLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 
-local _call233 = _callcloneref7:Create(_call78, _call16, {
-    PaddingBottom = UDim.new(0, 15),
+BackgroundPadding.Parent = Background
+BackgroundPadding.PaddingBottom = UDim.new(0, -75)
+
+-- Pulse Animation for loading dot
+local pulseUp = true
+task.spawn(function()
+    while InstallerGui.Parent ~= nil do
+        local targetTransparency = pulseUp and 0.6 or 0.15
+        local pulseTween = TweenService:Create(Animation, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {
+            BackgroundTransparency = targetTransparency
+        })
+        pulseTween:Play()
+        pulseTween.Completed:Wait()
+        pulseUp = not pulseUp
+    end
+end)
+
+-- Wait before showing
+task.wait(1)
+
+-- Slide in animation
+local slideIn = TweenService:Create(BackgroundPadding, AnimInfo, {
+    PaddingBottom = UDim.new(0, 15)
 })
+slideIn:Play()
 
-_call233:Play()
-
-task.spawn(function() end)
-
-makefolder('ArqelLibrary')
-makefolder('ArqelLibrary/Configs')
-makefolder('ArqelLibrary/Bin')
-
-_call30.Text = 'Arqel'
-_call32.Text = 'Checking files...'
-
-task.wait(0.4)
-
-_call30.Text = 'Arqel'
-_call32.Text = 'Loading resources...'
-
-task.wait(0.3)
-
-local _call249 = game:HttpGet([[https://raw.githubusercontent.com/Nappypie/glowing-giggle/refs/heads/main/Loa.lua]])
-
-writefile('ArqelLibrary/Loader.lua', _call249)
-
-_call30.Text = 'Arqel'
-_call32.Text = 'Launching...'
+-- Step 1: Checking files
+MainTitle.Text = 'Arqel'
+MainDesc.Text = 'Checking files...'
 
 task.wait(0.5)
 
-local _call258 = _callcloneref7:Create(_call28.Background.UIPadding, _call16, {
-    PaddingBottom = UDim.new(0, -75),
+-- Create folders
+local folderSuccess, folderError = pcall(function()
+    if not isfolder('ArqelLibrary') then
+        makefolder('ArqelLibrary')
+    end
+    if not isfolder('ArqelLibrary/Configs') then
+        makefolder('ArqelLibrary/Configs')
+    end
+    if not isfolder('ArqelLibrary/Bin') then
+        makefolder('ArqelLibrary/Bin')
+    end
+end)
+
+if not folderSuccess then
+    MainDesc.Text = 'Folder error: ' .. tostring(folderError)
+    task.wait(3)
+end
+
+task.wait(0.3)
+
+-- Step 2: Loading icons
+MainDesc.Text = 'Loading icons...'
+
+local NebulaIcons = nil
+local iconsLoaded = false
+
+local iconSuccess, iconError = pcall(function()
+    NebulaIcons = loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/nebula-icon-library-loader"))()
+    iconsLoaded = true
+end)
+
+if not iconSuccess then
+    MainDesc.Text = 'Icon load failed, using fallback...'
+    task.wait(1)
+    iconsLoaded = false
+end
+
+task.wait(0.3)
+
+-- Step 3: Caching assets
+MainDesc.Text = 'Caching assets...'
+
+-- Initialize icon cache
+genv.ArqelIcons = {}
+
+if iconsLoaded and NebulaIcons then
+    local iconList = {
+        {name = "Check", icon = "check", source = "Lucide"},
+        {name = "CheckCircle", icon = "check-circle", source = "Lucide"},
+        {name = "Close", icon = "x", source = "Lucide"},
+        {name = "Key", icon = "key", source = "Lucide"},
+        {name = "Settings", icon = "settings", source = "Lucide"},
+        {name = "Info", icon = "info", source = "Lucide"},
+        {name = "AlertTriangle", icon = "alert-triangle", source = "Lucide"},
+        {name = "AlertCircle", icon = "alert-circle", source = "Lucide"},
+        {name = "Copy", icon = "copy", source = "Lucide"},
+        {name = "Refresh", icon = "refresh-cw", source = "Lucide"},
+        {name = "ExternalLink", icon = "external-link", source = "Lucide"},
+        {name = "XCircle", icon = "x-circle", source = "Lucide"},
+        {name = "Eye", icon = "eye", source = "Lucide"},
+        {name = "EyeOff", icon = "eye-off", source = "Lucide"},
+        {name = "Link", icon = "link", source = "Lucide"},
+    }
+    
+    for _, iconData in ipairs(iconList) do
+        local success, result = pcall(function()
+            return NebulaIcons:GetIcon(iconData.icon, iconData.source)
+        end)
+        
+        if success and result then
+            genv.ArqelIcons[iconData.name] = result
+        else
+            genv.ArqelIcons[iconData.name] = ""
+        end
+    end
+else
+    -- Fallback - empty icons
+    local fallbackList = {"Check", "CheckCircle", "Close", "Key", "Settings", "Info", "AlertTriangle", "AlertCircle", "Copy", "Refresh", "ExternalLink", "XCircle", "Eye", "EyeOff", "Link"}
+    for _, name in ipairs(fallbackList) do
+        genv.ArqelIcons[name] = ""
+    end
+end
+
+task.wait(0.3)
+
+-- Step 4: Loading main library
+MainDesc.Text = 'Loading library...'
+
+local LoaderCode = nil
+local loaderSuccess, loaderError = pcall(function()
+    LoaderCode = game:HttpGet("https://raw.githubusercontent.com/Nappypie/glowing-giggle/refs/heads/main/Loa.lua")
+end)
+
+if not loaderSuccess then
+    MainDesc.Text = 'Failed to load library!'
+    task.wait(3)
+    InstallerGui:Destroy()
+    return nil
+end
+
+task.wait(0.3)
+
+-- Step 5: Launching
+MainDesc.Text = 'Launching...'
+
+task.wait(0.5)
+
+-- Slide out animation
+local slideOut = TweenService:Create(BackgroundPadding, AnimInfo, {
+    PaddingBottom = UDim.new(0, -75)
 })
+slideOut:Play()
 
-_call258:Play()
-task.wait(1)
-_call28:Destroy()
+task.wait(0.8)
 
-return loadstring(_call249)() 
+-- Destroy installer
+InstallerGui:Destroy()
+
+-- Load and return the library
+local Library = loadstring(LoaderCode)()
+
+-- Store reference
+genv.ArqelLibrary = Library
+genv.ArqelKeySystem = true
+
+return Library
