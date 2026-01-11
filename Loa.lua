@@ -2,8 +2,6 @@
 -- Crimson/Red/Black Theme
 
 local genv = getgenv()
-
--- Services
 local HttpService = cloneref(game:GetService('HttpService'))
 local TweenService = cloneref(game:GetService('TweenService'))
 local Players = cloneref(game:GetService('Players'))
@@ -11,89 +9,38 @@ local UserInputService = cloneref(game:GetService('UserInputService'))
 local CoreGui = cloneref(game:GetService('CoreGui'))
 local RunService = cloneref(game:GetService('RunService'))
 
--- Get cached icons
 local Icons = genv.ArqelIcons or {}
 
--- Helper function to get icon
 local function GetIcon(name)
     return Icons[name] or ""
 end
 
--- Color Palette
-local Colors = {
-    Dim = Color3.fromRGB(5, 5, 5),
-    LoaderBg = Color3.fromRGB(15, 10, 10),
-    ContentBg = Color3.fromRGB(0, 0, 0),
-    
-    StrokeDark = Color3.fromRGB(33, 15, 15),
-    StrokeLight = Color3.fromRGB(40, 20, 20),
-    StrokeAccent = Color3.fromRGB(180, 30, 30),
-    
-    TextWhite = Color3.fromRGB(255, 255, 255),
-    TextDim = Color3.fromRGB(220, 220, 220),
-    TextPlaceholder = Color3.fromRGB(100, 70, 70),
-    
-    ButtonStatic = Color3.fromRGB(47, 47, 47),
-    InputBg = Color3.fromRGB(15, 15, 15),
-    InputBgVerify = Color3.fromRGB(94, 94, 94),
-    
-    Primary = Color3.fromRGB(120, 20, 30),
-    AccentGradient1 = Color3.fromRGB(139, 0, 0),
-    AccentGradient2 = Color3.fromRGB(200, 40, 40),
-    
-    IconNormal = Color3.fromRGB(255, 180, 180),
-    IconActive = Color3.fromRGB(255, 220, 220),
-    IconDim = Color3.fromRGB(200, 100, 100),
-    
-    Success = Color3.fromRGB(83, 156, 70),
-    SuccessBg = Color3.fromRGB(10, 20, 8),
-    
-    Fail = Color3.fromRGB(200, 50, 50),
-    FailBg = Color3.fromRGB(30, 10, 10),
-    
-    NotificationBg = Color3.fromRGB(25, 15, 15),
-    NotificationText = Color3.fromRGB(255, 180, 180),
-    
-    Crimson = Color3.fromRGB(180, 30, 30),
-    CrimsonDark = Color3.fromRGB(120, 20, 30),
-}
+local LoaderBg = Color3.fromRGB(15, 10, 10)
+local ContentBg = Color3.fromRGB(0, 0, 0)
+local StrokeDark = Color3.fromRGB(33, 15, 15)
+local TextWhite = Color3.fromRGB(255, 255, 255)
+local ButtonStatic = Color3.fromRGB(47, 47, 47)
+local IconDim = Color3.fromRGB(200, 100, 100)
 
--- Fonts
-local Fonts = {
-    Main = Font.new('rbxasset://fonts/families/Nunito.json', Enum.FontWeight.Bold, Enum.FontStyle.Normal),
-    Main2 = Enum.Font.Nunito,
-    Header = Enum.Font.GothamBold,
-    SubHeader = Enum.Font.GothamMedium,
-    Simple = Enum.Font.SourceSans,
-}
+local Nunito = Enum.Font.Nunito
+local GothamBold = Enum.Font.GothamBold
+local GothamMedium = Enum.Font.GothamMedium
 
--- Settings
-local Settings = {
-    AnimStyle = Enum.EasingStyle.Exponential,
-    AnimSpeed = 0.8,
-    CornerRadius = UDim.new(0, 8),
-    PillRadius = UDim.new(1, 0),
-    AnimationColor = Color3.fromRGB(180, 30, 30),
-    AnimationTransparency = 0.7,
-    Custom = {
-        Remember = true,
-        BackgroundTransparent = true,
-    },
-}
+local LogoSize = UDim2.new(0, 95, 0, 95)
+local CornerRadius = UDim.new(0, 8)
+local PillRadius = UDim.new(1, 0)
 
--- Tween Infos
-local TweenFast = TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
-local TweenMedium = TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
-local TweenSlow = TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
+local Exponential = Enum.EasingStyle.Exponential
 
--- State
+local TweenFast = TweenInfo.new(0.3, Exponential, Enum.EasingDirection.Out)
+local TweenMedium = TweenInfo.new(0.5, Exponential, Enum.EasingDirection.Out)
+local TweenSlow = TweenInfo.new(0.8, Exponential, Enum.EasingDirection.Out)
+
+local ScreenGui
+local Background
+
 local ArqelUI = {}
-ArqelUI._gui = nil
-ArqelUI._mainLoader = nil
-ArqelUI._token = nil
-ArqelUI._keyFunction = nil
 
--- Keys table (public configuration)
 ArqelUI.Keys = {
     MainTitle = 'Arqel',
     MainDesc = 'Authenticate to Access Arqel',
@@ -110,84 +57,114 @@ ArqelUI.Keys = {
     Assets = {
         Logo = {
             ID = 'rbxassetid://122944092730557',
-            Size = UDim2.new(0, 95, 0, 95),
+            Size = LogoSize,
         },
     },
     
-    Colors = Colors,
-    Fonts = Fonts,
-    Settings = Settings,
+    Settings = {
+        AnimStyle = Exponential,
+        AnimSpeed = 0.8,
+        CornerRadius = CornerRadius,
+        PillRadius = PillRadius,
+        AnimationColor = Color3.fromRGB(180, 30, 30),
+        AnimationTransparency = 0.7,
+        Custom = {
+            Remember = true,
+            BackgroundTransparent = true,
+        },
+    },
+    
+    Colors = {
+        Dim = Color3.fromRGB(5, 5, 5),
+        LoaderBg = LoaderBg,
+        ContentBg = ContentBg,
+        StrokeDark = StrokeDark,
+        StrokeLight = Color3.fromRGB(40, 20, 20),
+        StrokeAccent = Color3.fromRGB(180, 30, 30),
+        TextWhite = TextWhite,
+        TextDim = Color3.fromRGB(220, 220, 220),
+        TextPlaceholder = Color3.fromRGB(100, 70, 70),
+        ButtonStatic = ButtonStatic,
+        InputBg = Color3.fromRGB(15, 15, 15),
+        InputBgVerify = Color3.fromRGB(94, 94, 94),
+        Primary = Color3.fromRGB(120, 20, 30),
+        AccentGradient1 = Color3.fromRGB(139, 0, 0),
+        AccentGradient2 = Color3.fromRGB(200, 40, 40),
+        IconNormal = Color3.fromRGB(255, 180, 180),
+        IconActive = Color3.fromRGB(255, 220, 220),
+        IconDim = IconDim,
+        Success = Color3.fromRGB(83, 156, 70),
+        SuccessBg = Color3.fromRGB(10, 20, 8),
+        Fail = Color3.fromRGB(200, 50, 50),
+        FailBg = Color3.fromRGB(30, 10, 10),
+        NotificationBg = Color3.fromRGB(33, 20, 25),
+        NotificationText = Color3.fromRGB(255, 180, 180),
+    },
+    
+    Fonts = {
+        Main = Font.new('rbxasset://fonts/families/Nunito.json', Enum.FontWeight.Bold, Enum.FontStyle.Normal),
+        Main2 = Nunito,
+        Header = GothamBold,
+        SubHeader = GothamMedium,
+        Simple = Enum.Font.SourceSans,
+    },
 }
 
--- Utility: Create instance with properties
-local function Create(className, properties)
-    local instance = Instance.new(className)
-    for prop, value in pairs(properties) do
-        if prop ~= "Parent" then
-            instance[prop] = value
-        end
-    end
-    if properties.Parent then
-        instance.Parent = properties.Parent
-    end
-    return instance
-end
-
--- Utility: Safe tween
-local function SafeTween(instance, tweenInfo, properties)
-    if instance and instance.Parent then
-        local tween = TweenService:Create(instance, tweenInfo, properties)
-        tween:Play()
-        return tween
-    end
-    return nil
-end
-
--- Utility: Type text animation
 local function TypeText(label, text, speed)
     speed = speed or 0.02
-    label.Text = ""
     for i = 1, #text do
         label.Text = string.sub(text, 1, i)
         task.wait(speed)
     end
 end
 
--- Load saved config
-function ArqelUI:LoadConfig()
-    local configPath = 'ArqelLibrary/Configs/' .. self.Keys.Directory .. '.json'
-    
-    if isfile(configPath) then
-        local success, data = pcall(function()
-            return HttpService:JSONDecode(readfile(configPath))
-        end)
-        
-        if success and data then
-            return data
-        end
+local function SafeTween(instance, info, props)
+    if instance and instance.Parent then
+        local tween = TweenService:Create(instance, info, props)
+        tween:Play()
+        return tween
     end
-    
     return nil
 end
 
--- Save config
-function ArqelUI:SaveConfig(data)
-    local configPath = 'ArqelLibrary/Configs/' .. self.Keys.Directory .. '.json'
-    
-    local success, err = pcall(function()
-        writefile(configPath, HttpService:JSONEncode(data))
-    end)
-    
-    return success
+function ArqelUI.LoadConfig()
+    if RunService:IsStudio() then return nil end
+    local path = 'ArqelLibrary/Configs/' .. ArqelUI.Keys.Directory .. '.json'
+    if isfile and isfile(path) then
+        local success, data = pcall(function()
+            return HttpService:JSONDecode(readfile(path))
+        end)
+        if success then
+            return data
+        end
+    end
+    return nil
 end
 
--- Notify function
-function ArqelUI:Notify(options)
+function ArqelUI.SaveConfig(data)
+    if RunService:IsStudio() then return end
+    local path = 'ArqelLibrary/Configs/' .. ArqelUI.Keys.Directory .. '.json'
+    pcall(function()
+        writefile(path, HttpService:JSONEncode(data or {
+            Remember = true,
+            BackgroundTransparent = true,
+        }))
+    end)
+end
+
+function ArqelUI.Notify(options)
     options = options or {}
     local Title = options.Title or "Arqel"
     local Description = options.Description or "Notification"
     local Duration = options.Duration or 5
     local Type = options.Type or "info"
+    
+    local colorMap = {
+        info = ArqelUI.Keys.Colors.StrokeAccent,
+        success = ArqelUI.Keys.Colors.Success,
+        warn = Color3.fromRGB(255, 170, 0),
+        alert = ArqelUI.Keys.Colors.Fail,
+    }
     
     local iconMap = {
         info = GetIcon("Info"),
@@ -196,744 +173,693 @@ function ArqelUI:Notify(options)
         alert = GetIcon("AlertCircle"),
     }
     
-    local colorMap = {
-        info = Colors.Crimson,
-        success = Colors.Success,
-        warn = Color3.fromRGB(255, 170, 0),
-        alert = Colors.Fail,
-    }
-    
-    local icon = iconMap[Type] or iconMap.info
     local barColor = colorMap[Type] or colorMap.info
+    local iconImage = iconMap[Type] or iconMap.info
     
     task.spawn(function()
-        local gui = self._gui
-        if not gui then return end
+        if not ScreenGui then return end
+        local Notifications = ScreenGui:FindFirstChild('Notifications')
+        if not Notifications then return end
+        local NotificationsList = Notifications:FindFirstChild('NotificationsFrame')
+        if NotificationsList then
+            NotificationsList = NotificationsList:FindFirstChild('NotificationsList')
+        end
+        if not NotificationsList then return end
         
-        local notifContainer = gui:FindFirstChild('NotificationsContainer')
-        if not notifContainer then return end
+        local NotifFrame = Instance.new('Frame')
+        NotifFrame.Name = 'Notification'
+        NotifFrame.Parent = NotificationsList
+        NotifFrame.BackgroundColor3 = ArqelUI.Keys.Colors.NotificationBg
+        NotifFrame.BorderSizePixel = 0
+        NotifFrame.Position = UDim2.new(1, 2, 0, 0)
+        NotifFrame.Size = UDim2.new(0, 260, 0, 73)
         
-        local notifList = notifContainer:FindFirstChild('NotificationsList')
-        if not notifList then return end
+        local NotifCorner = Instance.new('UICorner')
+        NotifCorner.CornerRadius = UDim.new(0, 5)
+        NotifCorner.Parent = NotifFrame
         
-        -- Create notification frame
-        local notifFrame = Create('Frame', {
-            Name = 'Notification',
-            Parent = notifList,
-            BackgroundColor3 = Colors.NotificationBg,
-            BorderSizePixel = 0,
-            Position = UDim2.new(1, 10, 0, 0),
-            Size = UDim2.new(1, 0, 0, 73),
-        })
+        Instance.new('UIScale').Parent = NotifFrame
         
-        Create('UICorner', {
-            Parent = notifFrame,
-            CornerRadius = UDim.new(0, 6),
-        })
+        local Corners = Instance.new('Folder')
+        Corners.Name = 'Corners'
+        Corners.Parent = NotifFrame
         
-        Create('UIStroke', {
-            Parent = notifFrame,
-            Color = Colors.StrokeDark,
-            Transparency = 0.5,
-            Thickness = 1,
-        })
+        local TopRight = Instance.new('Frame')
+        TopRight.Name = 'TopRight'
+        TopRight.Parent = Corners
+        TopRight.BackgroundColor3 = ArqelUI.Keys.Colors.NotificationBg
+        TopRight.BorderSizePixel = 0
+        TopRight.Position = UDim2.new(0.946, 0, -0.001, 0)
+        TopRight.Size = UDim2.new(0.054, 0, 0.077, 0)
         
-        -- Left accent bar
-        local leftBar = Create('Frame', {
-            Name = 'LeftBar',
-            Parent = notifFrame,
-            BackgroundColor3 = barColor,
-            BorderSizePixel = 0,
-            Position = UDim2.new(0, 0, 0, 0),
-            Size = UDim2.new(0, 3, 1, 0),
-        })
+        local BottomRight = Instance.new('Frame')
+        BottomRight.Name = 'BottomRight'
+        BottomRight.Parent = Corners
+        BottomRight.BackgroundColor3 = ArqelUI.Keys.Colors.NotificationBg
+        BottomRight.BorderSizePixel = 0
+        BottomRight.Position = UDim2.new(0.947, 0, 0.92, 1)
+        BottomRight.Size = UDim2.new(0.054, 0, 0.067, 0)
         
-        Create('UICorner', {
-            Parent = leftBar,
-            CornerRadius = UDim.new(0, 6),
-        })
+        local BottomLeft = Instance.new('Frame')
+        BottomLeft.Name = 'BottomLeft'
+        BottomLeft.Parent = Corners
+        BottomLeft.BackgroundColor3 = ArqelUI.Keys.Colors.NotificationBg
+        BottomLeft.BorderSizePixel = 0
+        BottomLeft.Position = UDim2.new(0, -1, 0.92, 1)
+        BottomLeft.Size = UDim2.new(0.054, 0, 0.067, 0)
         
-        -- Progress bar background
-        local barBg = Create('Frame', {
-            Name = 'BarBackground',
-            Parent = notifFrame,
-            BackgroundColor3 = Color3.fromRGB(48, 48, 48),
-            BorderSizePixel = 0,
-            Position = UDim2.new(0, 0, 1, -3),
-            Size = UDim2.new(1, 0, 0, 3),
-        })
+        local LeftBar = Instance.new('Frame')
+        LeftBar.Name = 'LeftBar'
+        LeftBar.Parent = NotifFrame
+        LeftBar.BackgroundColor3 = barColor
+        LeftBar.BorderSizePixel = 0
+        LeftBar.Position = UDim2.new(1, 0, 0, 0)
+        LeftBar.Size = UDim2.new(0, 3, 1.03, 0)
         
-        -- Progress bar
-        local progressBar = Create('Frame', {
-            Name = 'ProgressBar',
-            Parent = barBg,
-            BackgroundColor3 = barColor,
-            BorderSizePixel = 0,
-            Size = UDim2.new(1, 0, 1, 0),
-        })
+        local BarBackground = Instance.new('Frame')
+        BarBackground.Name = 'BarBackground'
+        BarBackground.Parent = NotifFrame
+        BarBackground.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+        BarBackground.BorderSizePixel = 0
+        BarBackground.Position = UDim2.new(0, -1, 0.999, 0)
+        BarBackground.Size = UDim2.new(1, 0, 0, 3)
         
-        -- Main content frame
-        local mainFrame = Create('Frame', {
-            Name = 'MainFrame',
-            Parent = notifFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 1, -3),
-        })
+        local Bar = Instance.new('Frame')
+        Bar.Name = 'Bar'
+        Bar.Parent = BarBackground
+        Bar.BackgroundColor3 = barColor
+        Bar.BorderSizePixel = 0
+        Bar.Size = UDim2.new(1.01, 0, 0, 3)
         
-        Create('UIListLayout', {
-            Parent = mainFrame,
-            FillDirection = Enum.FillDirection.Horizontal,
-            SortOrder = Enum.SortOrder.LayoutOrder,
-        })
+        local MainFrame = Instance.new('Frame')
+        MainFrame.Name = 'MainFrame'
+        MainFrame.Parent = NotifFrame
+        MainFrame.BackgroundTransparency = 1
+        MainFrame.Size = UDim2.new(0, 260, 0, 70)
         
-        -- Icon frame
-        local iconFrame = Create('Frame', {
-            Name = 'IconFrame',
-            Parent = mainFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(0, 50, 1, 0),
-        })
+        local MainLayout = Instance.new('UIListLayout')
+        MainLayout.Parent = MainFrame
+        MainLayout.FillDirection = Enum.FillDirection.Horizontal
+        MainLayout.SortOrder = Enum.SortOrder.LayoutOrder
         
-        Create('UIPadding', {
-            Parent = iconFrame,
-            PaddingBottom = UDim.new(0, 15),
-            PaddingLeft = UDim.new(0, 12),
-            PaddingRight = UDim.new(0, 5),
-            PaddingTop = UDim.new(0, 15),
-        })
+        local LeftFrame = Instance.new('Frame')
+        LeftFrame.Name = 'LeftFrame'
+        LeftFrame.Parent = MainFrame
+        LeftFrame.BackgroundTransparency = 1
+        LeftFrame.Size = UDim2.new(0, 60, 1, 0)
         
-        Create('ImageLabel', {
-            Parent = iconFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Image = icon,
-            ImageColor3 = barColor,
-        })
+        local LeftPadding = Instance.new('UIPadding')
+        LeftPadding.Parent = LeftFrame
+        LeftPadding.PaddingBottom = UDim.new(0, 17)
+        LeftPadding.PaddingLeft = UDim.new(0, 12)
+        LeftPadding.PaddingRight = UDim.new(0, 12)
+        LeftPadding.PaddingTop = UDim.new(0, 17)
         
-        -- Text frame
-        local textFrame = Create('Frame', {
-            Name = 'TextFrame',
-            Parent = mainFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, -50, 1, 0),
-        })
+        local IconLabel = Instance.new('ImageLabel')
+        IconLabel.Parent = LeftFrame
+        IconLabel.BackgroundTransparency = 1
+        IconLabel.Size = UDim2.new(1, 0, 1, 0)
+        IconLabel.Image = iconImage
+        IconLabel.ImageColor3 = barColor
         
-        Create('UIPadding', {
-            Parent = textFrame,
-            PaddingTop = UDim.new(0, 12),
-            PaddingRight = UDim.new(0, 10),
-        })
+        local RightFrame = Instance.new('Frame')
+        RightFrame.Name = 'RightFrame'
+        RightFrame.Parent = MainFrame
+        RightFrame.BackgroundTransparency = 1
+        RightFrame.Size = UDim2.new(0, 200, 1, 0)
         
-        Create('UIListLayout', {
-            Parent = textFrame,
-            SortOrder = Enum.SortOrder.LayoutOrder,
-            Padding = UDim.new(0, 2),
-        })
+        local RightPadding = Instance.new('UIPadding')
+        RightPadding.Parent = RightFrame
+        RightPadding.PaddingTop = UDim.new(0, 12)
         
-        Create('TextLabel', {
-            Name = 'Title',
-            Parent = textFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 18),
-            Font = Fonts.Main2,
-            Text = Title,
-            TextColor3 = Colors.TextWhite,
-            TextSize = 14,
-            TextXAlignment = Enum.TextXAlignment.Left,
-        })
+        local RightLayout = Instance.new('UIListLayout')
+        RightLayout.Parent = RightFrame
+        RightLayout.SortOrder = Enum.SortOrder.LayoutOrder
         
-        Create('TextLabel', {
-            Name = 'Description',
-            Parent = textFrame,
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 30),
-            Font = Fonts.Main2,
-            Text = Description,
-            TextColor3 = Colors.TextWhite,
-            TextTransparency = 0.5,
-            TextSize = 12,
-            TextWrapped = true,
-            TextXAlignment = Enum.TextXAlignment.Left,
-            TextYAlignment = Enum.TextYAlignment.Top,
-        })
+        local TitleLabel = Instance.new('TextLabel')
+        TitleLabel.Parent = RightFrame
+        TitleLabel.BackgroundTransparency = 1
+        TitleLabel.Size = UDim2.new(0, 190, 0, 15)
+        TitleLabel.Font = Nunito
+        TitleLabel.Text = ''
+        TitleLabel.TextColor3 = TextWhite
+        TitleLabel.TextSize = 14
+        TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
         
-        -- Slide in
-        SafeTween(notifFrame, TweenMedium, {
-            Position = UDim2.new(0, 0, 0, 0)
-        })
+        local DescLabel = Instance.new('TextLabel')
+        DescLabel.Parent = RightFrame
+        DescLabel.BackgroundTransparency = 1
+        DescLabel.Size = UDim2.new(0, 190, 0, 15)
+        DescLabel.Font = Nunito
+        DescLabel.Text = ''
+        DescLabel.TextColor3 = TextWhite
+        DescLabel.TextSize = 11
+        DescLabel.TextTransparency = 0.7
+        DescLabel.TextWrapped = true
+        DescLabel.TextXAlignment = Enum.TextXAlignment.Left
         
-        -- Progress bar countdown
-        SafeTween(progressBar, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {
-            Size = UDim2.new(0, 0, 1, 0)
-        })
+        SafeTween(NotifFrame, TweenMedium, {Position = UDim2.new(0, 0, 0, 0)})
         
-        -- Auto remove
+        task.spawn(TypeText, TitleLabel, Title, 0.02)
+        task.spawn(TypeText, DescLabel, Description, 0.02)
+        
+        SafeTween(Bar, TweenInfo.new(Duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)})
+        
         task.delay(Duration, function()
-            if notifFrame and notifFrame.Parent then
-                SafeTween(notifFrame, TweenFast, {
-                    Position = UDim2.new(1, 10, 0, 0)
-                })
+            if NotifFrame and NotifFrame.Parent then
+                SafeTween(NotifFrame, TweenFast, {Position = UDim2.new(1, 2, 0, 0)})
                 task.wait(0.3)
-                if notifFrame and notifFrame.Parent then
-                    notifFrame:Destroy()
+                if NotifFrame and NotifFrame.Parent then
+                    NotifFrame:Destroy()
                 end
             end
         end)
     end)
 end
 
--- Fail function
-function ArqelUI:Fail()
-    self:Notify({
+function ArqelUI.Fail()
+    ArqelUI.Notify({
         Title = "Arqel",
         Description = "Invalid Key",
         Duration = 5,
         Type = "alert"
     })
     
-    -- Shake animation on input box
-    if self._keyBox then
-        local originalPos = self._keyBox.Position
+    if ArqelUI._keyBox then
+        local originalPos = ArqelUI._keyBox.Position
         for i = 1, 5 do
-            SafeTween(self._keyBox, TweenInfo.new(0.05), {
-                Position = originalPos + UDim2.new(0, 5, 0, 0)
-            })
+            SafeTween(ArqelUI._keyBox, TweenInfo.new(0.05), {Position = originalPos + UDim2.new(0, 5, 0, 0)})
             task.wait(0.05)
-            SafeTween(self._keyBox, TweenInfo.new(0.05), {
-                Position = originalPos + UDim2.new(0, -5, 0, 0)
-            })
+            SafeTween(ArqelUI._keyBox, TweenInfo.new(0.05), {Position = originalPos + UDim2.new(0, -5, 0, 0)})
             task.wait(0.05)
         end
-        SafeTween(self._keyBox, TweenInfo.new(0.05), {
-            Position = originalPos
-        })
+        SafeTween(ArqelUI._keyBox, TweenInfo.new(0.05), {Position = originalPos})
     end
 end
 
--- Authorize function
-function ArqelUI:Authorize(token)
-    if token == self._token then
-        self:Notify({
+function ArqelUI.Authorize(token)
+    if token == ArqelUI._token then
+        ArqelUI.Notify({
             Title = "Arqel",
             Description = "Key Verified Successfully",
             Duration = 3,
             Type = "success"
         })
         
-        -- Save key if remember is enabled
-        local keyInput = self._keyInput
-        if keyInput and Settings.Custom.Remember then
-            self:SaveConfig({
-                Key = keyInput,
-                Remember = true,
-            })
+        if ArqelUI._keyInput and ArqelUI.Keys.Settings.Custom.Remember then
+            ArqelUI.SaveConfig({Key = ArqelUI._keyInput, Remember = true})
         end
         
         task.wait(1)
         
-        -- Fade out GUI
-        if self._gui then
-            local background = self._gui:FindFirstChild('Background')
-            if background then
-                SafeTween(background, TweenMedium, {
-                    GroupTransparency = 1
-                })
-            end
-            task.wait(0.5)
-            self._gui:Destroy()
-            self._gui = nil
+        if Background then
+            SafeTween(Background, TweenMedium, {GroupTransparency = 1})
         end
         
-        -- Run main loader
-        if self._mainLoader then
-            self._mainLoader()
+        task.wait(0.5)
+        
+        if ScreenGui then
+            ScreenGui:Destroy()
+            ScreenGui = nil
+        end
+        
+        if ArqelUI._mainLoader then
+            ArqelUI._mainLoader()
         end
     else
-        self:Fail()
+        ArqelUI.Fail()
     end
 end
 
--- Add Settings function
-function ArqelUI:AddSettings(settingConfig)
-    -- Store settings for later use
-    if not self._customSettings then
-        self._customSettings = {}
+function ArqelUI.AddSettings(config)
+    if not ArqelUI._customSettings then
+        ArqelUI._customSettings = {}
     end
-    table.insert(self._customSettings, settingConfig)
+    table.insert(ArqelUI._customSettings, config)
 end
 
--- Add Update function
-function ArqelUI:AddUpdate(updateData)
-    table.insert(self.Keys.Updates, updateData)
+function ArqelUI.AddUpdate(updateData, order)
+    table.insert(ArqelUI.Keys.Updates, updateData)
 end
 
--- Initialize function (main entry point)
-function ArqelUI:Initialize(config)
+function ArqelUI.AdjustTextbox() end
+
+function ArqelUI.Initialize(config)
     config = config or {}
     
-    self._mainLoader = config.MainLoader
-    self._keyFunction = config.Function
-    self._token = config.Token or ""
-    self.Keys.KeyLink = config.KeyLink or ""
-    self.Keys.Keyless = config.Keyless or false
-    self.Keys.Premium = config.Premium or false
+    ArqelUI._mainLoader = config.MainLoader
+    ArqelUI._keyFunction = config.Function
+    ArqelUI._token = config.Token or ""
+    ArqelUI.Keys.KeyLink = config.KeyLink or ""
+    ArqelUI.Keys.Keyless = config.Keyless or false
+    ArqelUI.Keys.Premium = config.Premium or false
     
-    -- Check for saved key
-    local savedConfig = self:LoadConfig()
+    local savedConfig = ArqelUI.LoadConfig()
     if savedConfig and savedConfig.Key and savedConfig.Remember then
-        if self._keyFunction then
-            self._keyInput = savedConfig.Key
-            self._keyFunction(savedConfig.Key)
+        ArqelUI._keyInput = savedConfig.Key
+        if ArqelUI._keyFunction then
+            ArqelUI._keyFunction(savedConfig.Key)
             return
         end
     end
     
-    -- Keyless mode - skip GUI
-    if self.Keys.Keyless then
-        if self._mainLoader then
-            self._mainLoader()
+    if ArqelUI.Keys.Keyless then
+        if ArqelUI._mainLoader then
+            ArqelUI._mainLoader()
         end
         return
     end
     
-    -- Create main GUI
-    local screenGui = Create('ScreenGui', {
-        Name = 'ArqelUI',
-        Parent = gethui(),
-        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-        DisplayOrder = 100,
-        IgnoreGuiInset = true,
-        ResetOnSpawn = false,
-    })
-    
-    self._gui = screenGui
-    
-    -- Background
-    local background = Create('CanvasGroup', {
-        Name = 'Background',
-        Parent = screenGui,
-        BackgroundColor3 = Colors.Dim,
-        BackgroundTransparency = 0.3,
-        BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
-        GroupTransparency = 1,
-    })
-    
-    -- Main loader frame
-    local loader = Create('Frame', {
-        Name = 'Loader',
-        Parent = background,
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = Colors.LoaderBg,
-        BorderSizePixel = 0,
-        ClipsDescendants = true,
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0, 360, 0, 420),
-    })
-    
-    Create('UICorner', {
-        Parent = loader,
-        CornerRadius = UDim.new(0, 12),
-    })
-    
-    Create('UIStroke', {
-        Parent = loader,
-        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-        Color = Colors.StrokeDark,
-        Thickness = 1,
-    })
-    
-    -- Content holder
-    local content = Create('Frame', {
-        Name = 'Content',
-        Parent = loader,
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1, 0, 1, 0),
-    })
-    
-    Create('UIPadding', {
-        Parent = content,
-        PaddingBottom = UDim.new(0, 20),
-        PaddingLeft = UDim.new(0, 25),
-        PaddingRight = UDim.new(0, 25),
-        PaddingTop = UDim.new(0, 25),
-    })
-    
-    Create('UIListLayout', {
-        Parent = content,
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        HorizontalAlignment = Enum.HorizontalAlignment.Center,
-        Padding = UDim.new(0, 15),
-    })
-    
-    -- Logo frame
-    local logoFrame = Create('Frame', {
-        Name = 'LogoFrame',
-        Parent = content,
-        BackgroundTransparency = 1,
-        LayoutOrder = 1,
-        Size = self.Keys.Assets.Logo.Size,
-    })
-    
-    Create('ImageLabel', {
-        Name = 'Logo',
-        Parent = logoFrame,
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1, 0, 1, 0),
-        Image = self.Keys.Assets.Logo.ID,
-        ScaleType = Enum.ScaleType.Fit,
-    })
-    
-    -- Title
-    Create('TextLabel', {
-        Name = 'Title',
-        Parent = content,
-        BackgroundTransparency = 1,
-        LayoutOrder = 2,
-        Size = UDim2.new(1, 0, 0, 30),
-        Font = Fonts.Header,
-        Text = self.Keys.MainTitle,
-        TextColor3 = Colors.TextWhite,
-        TextSize = 24,
-    })
-    
-    -- Description
-    Create('TextLabel', {
-        Name = 'Description',
-        Parent = content,
-        BackgroundTransparency = 1,
-        LayoutOrder = 3,
-        Size = UDim2.new(1, 0, 0, 20),
-        Font = Fonts.SubHeader,
-        Text = self.Keys.MainDesc,
-        TextColor3 = Colors.TextDim,
-        TextTransparency = 0.3,
-        TextSize = 14,
-    })
-    
-    -- Key input frame
-    local keyFrame = Create('Frame', {
-        Name = 'KeyFrame',
-        Parent = content,
-        BackgroundColor3 = Colors.InputBg,
-        LayoutOrder = 4,
-        Size = UDim2.new(1, 0, 0, 45),
-    })
-    
-    self._keyBox = keyFrame
-    
-    Create('UICorner', {
-        Parent = keyFrame,
-        CornerRadius = Settings.CornerRadius,
-    })
-    
-    Create('UIStroke', {
-        Parent = keyFrame,
-        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-        Color = Colors.StrokeDark,
-        Thickness = 1,
-    })
-    
-    Create('UIPadding', {
-        Parent = keyFrame,
-        PaddingLeft = UDim.new(0, 15),
-        PaddingRight = UDim.new(0, 15),
-    })
-    
-    -- Key icon
-    local keyIcon = Create('ImageLabel', {
-        Name = 'KeyIcon',
-        Parent = keyFrame,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0, 0, 0.5, -10),
-        Size = UDim2.new(0, 20, 0, 20),
-        Image = GetIcon("Key"),
-        ImageColor3 = Colors.IconDim,
-    })
-    
-    -- Key input
-    local keyInput = Create('TextBox', {
-        Name = 'KeyInput',
-        Parent = keyFrame,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0, 30, 0, 0),
-        Size = UDim2.new(1, -30, 1, 0),
-        Font = Fonts.Main2,
-        PlaceholderText = "Enter Key...",
-        PlaceholderColor3 = Colors.TextPlaceholder,
-        Text = "",
-        TextColor3 = Colors.TextWhite,
-        TextSize = 14,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        ClearTextOnFocus = false,
-    })
-    
-    -- Focus effects
-    keyInput.Focused:Connect(function()
-        SafeTween(keyFrame:FindFirstChildOfClass('UIStroke'), TweenFast, {
-            Color = Colors.Crimson
-        })
-        SafeTween(keyIcon, TweenFast, {
-            ImageColor3 = Colors.Crimson
-        })
-    end)
-    
-    keyInput.FocusLost:Connect(function()
-        SafeTween(keyFrame:FindFirstChildOfClass('UIStroke'), TweenFast, {
-            Color = Colors.StrokeDark
-        })
-        SafeTween(keyIcon, TweenFast, {
-            ImageColor3 = Colors.IconDim
-        })
-    end)
-    
-    -- Buttons frame
-    local buttonsFrame = Create('Frame', {
-        Name = 'ButtonsFrame',
-        Parent = content,
-        BackgroundTransparency = 1,
-        LayoutOrder = 5,
-        Size = UDim2.new(1, 0, 0, 45),
-    })
-    
-    Create('UIListLayout', {
-        Parent = buttonsFrame,
-        FillDirection = Enum.FillDirection.Horizontal,
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        HorizontalAlignment = Enum.HorizontalAlignment.Center,
-        Padding = UDim.new(0, 10),
-    })
-    
-    -- Get Key / Discord button
-    local getKeyBtn = Create('TextButton', {
-        Name = 'GetKeyButton',
-        Parent = buttonsFrame,
-        BackgroundColor3 = Colors.ButtonStatic,
-        LayoutOrder = 1,
-        Size = UDim2.new(0.48, 0, 1, 0),
-        Font = Fonts.Main2,
-        Text = self.Keys.Premium and "Discord" or "Get Key",
-        TextColor3 = Colors.TextWhite,
-        TextSize = 14,
-        AutoButtonColor = false,
-    })
-    
-    Create('UICorner', {
-        Parent = getKeyBtn,
-        CornerRadius = Settings.CornerRadius,
-    })
-    
-    -- Get Key button hover effect
-    getKeyBtn.MouseEnter:Connect(function()
-        SafeTween(getKeyBtn, TweenFast, {
-            BackgroundColor3 = Colors.CrimsonDark
-        })
-    end)
-    
-    getKeyBtn.MouseLeave:Connect(function()
-        SafeTween(getKeyBtn, TweenFast, {
-            BackgroundColor3 = Colors.ButtonStatic
-        })
-    end)
-    
-    -- Get Key button click
-    getKeyBtn.MouseButton1Click:Connect(function()
-        local link = self.Keys.Premium and self.Keys.DiscordLink or self.Keys.KeyLink
-        if link and link ~= "" then
-            if setclipboard then
-                setclipboard(link)
-            end
-            if request then
-                request({
-                    Url = "http://127.0.0.1/open?url=" .. link,
-                    Method = "GET",
-                })
-            end
+    pcall(function()
+        if makefolder then
+            if not isfolder('ArqelLibrary') then makefolder('ArqelLibrary') end
+            if not isfolder('ArqelLibrary/Configs') then makefolder('ArqelLibrary/Configs') end
+            if not isfolder('ArqelLibrary/Bin') then makefolder('ArqelLibrary/Bin') end
         end
     end)
     
-    -- Verify button
-    local verifyBtn = Create('TextButton', {
-        Name = 'VerifyButton',
-        Parent = buttonsFrame,
-        BackgroundColor3 = Colors.Crimson,
-        LayoutOrder = 2,
-        Size = UDim2.new(0.48, 0, 1, 0),
-        Font = Fonts.Main2,
-        Text = "Verify",
-        TextColor3 = Colors.TextWhite,
-        TextSize = 14,
-        AutoButtonColor = false,
-    })
+    ScreenGui = Instance.new('ScreenGui')
+    ScreenGui.Name = 'ArqelUI'
+    ScreenGui.Parent = gethui()
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    ScreenGui.Enabled = true
+    ScreenGui.DisplayOrder = 100
+    ScreenGui.IgnoreGuiInset = true
+    ScreenGui.ResetOnSpawn = false
     
-    Create('UICorner', {
-        Parent = verifyBtn,
-        CornerRadius = Settings.CornerRadius,
-    })
+    Background = Instance.new('CanvasGroup')
+    Background.Name = 'Background'
+    Background.Parent = ScreenGui
+    Background.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
+    Background.BackgroundTransparency = 0
+    Background.BorderSizePixel = 0
+    Background.Size = UDim2.new(1, 0, 1, 0)
+    Background.GroupTransparency = 1
     
-    -- Verify button hover effect
-    verifyBtn.MouseEnter:Connect(function()
-        SafeTween(verifyBtn, TweenFast, {
-            BackgroundColor3 = Colors.AccentGradient2
-        })
+    local Loader = Instance.new('Frame')
+    Loader.Name = 'Loader'
+    Loader.Parent = Background
+    Loader.AnchorPoint = Vector2.new(0.5, 0.5)
+    Loader.BackgroundColor3 = LoaderBg
+    Loader.BorderSizePixel = 0
+    Loader.BackgroundTransparency = 1
+    Loader.ClipsDescendants = true
+    Loader.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Loader.Size = UDim2.new(0, 360, 0, 480)
+    
+    local ContentHolder = Instance.new('CanvasGroup')
+    ContentHolder.Name = 'ContentHolder'
+    ContentHolder.Parent = Loader
+    ContentHolder.AnchorPoint = Vector2.new(0.5, 0.5)
+    ContentHolder.BackgroundColor3 = ContentBg
+    ContentHolder.BackgroundTransparency = 0.2
+    ContentHolder.Position = UDim2.new(0.5, 0, 0.5, 0)
+    ContentHolder.Size = UDim2.new(0, 360, 1, 0)
+    
+    local ContentCorner = Instance.new('UICorner')
+    ContentCorner.CornerRadius = UDim.new(0, 12)
+    ContentCorner.Parent = ContentHolder
+    
+    local ContentConstraint = Instance.new('UISizeConstraint')
+    ContentConstraint.Parent = ContentHolder
+    ContentConstraint.MaxSize = Vector2.new(360, 460)
+    
+    local ContentPadding = Instance.new('UIPadding')
+    ContentPadding.Name = 'UIPadding'
+    ContentPadding.Parent = ContentHolder
+    ContentPadding.PaddingBottom = UDim.new(0, 18)
+    
+    local ContentStroke = Instance.new('UIStroke')
+    ContentStroke.Parent = ContentHolder
+    ContentStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    ContentStroke.Color = StrokeDark
+    ContentStroke.Thickness = 1
+    
+    local TopFrame = Instance.new('Frame')
+    TopFrame.Name = 'TopFrame'
+    TopFrame.Parent = ContentHolder
+    TopFrame.BackgroundTransparency = 1
+    TopFrame.BorderSizePixel = 0
+    TopFrame.Size = UDim2.new(1, 0, 0.154, 100)
+    
+    local TopLayout = Instance.new('UIListLayout')
+    TopLayout.Parent = TopFrame
+    TopLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    TopLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    TopLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    
+    local LogoFrame = Instance.new('Frame')
+    LogoFrame.Name = 'LogoFrame'
+    LogoFrame.Parent = TopFrame
+    LogoFrame.BackgroundTransparency = 1
+    LogoFrame.BorderSizePixel = 0
+    LogoFrame.LayoutOrder = 0
+    LogoFrame.Size = UDim2.new(0, 100, 0, 100)
+    
+    local LogoLayout = Instance.new('UIListLayout')
+    LogoLayout.Parent = LogoFrame
+    LogoLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    LogoLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    LogoLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    
+    local Logo = Instance.new('ImageLabel')
+    Logo.Name = 'Logo'
+    Logo.Parent = LogoFrame
+    Logo.BackgroundTransparency = 1
+    Logo.BorderSizePixel = 0
+    Logo.Size = ArqelUI.Keys.Assets.Logo.Size
+    Logo.Image = ArqelUI.Keys.Assets.Logo.ID
+    
+    local LogoCorner = Instance.new('UICorner')
+    LogoCorner.CornerRadius = CornerRadius
+    LogoCorner.Parent = Logo
+    
+    local LoaderTitle = Instance.new('TextLabel')
+    LoaderTitle.Name = 'LoaderTitle'
+    LoaderTitle.Parent = TopFrame
+    LoaderTitle.BackgroundTransparency = 1
+    LoaderTitle.BorderSizePixel = 0
+    LoaderTitle.LayoutOrder = 1
+    LoaderTitle.Size = UDim2.new(1, 0, 0, 30)
+    LoaderTitle.Font = GothamBold
+    LoaderTitle.Text = ArqelUI.Keys.MainTitle
+    LoaderTitle.TextColor3 = TextWhite
+    LoaderTitle.TextSize = 20
+    LoaderTitle.TextTransparency = 0.2
+    
+    local LoaderDesc = Instance.new('TextLabel')
+    LoaderDesc.Name = 'LoaderDesc'
+    LoaderDesc.Parent = TopFrame
+    LoaderDesc.BackgroundTransparency = 1
+    LoaderDesc.BorderSizePixel = 0
+    LoaderDesc.LayoutOrder = 2
+    LoaderDesc.Size = UDim2.new(1, 0, 0, 30)
+    LoaderDesc.Font = GothamMedium
+    LoaderDesc.Text = ArqelUI.Keys.MainDesc
+    LoaderDesc.TextColor3 = TextWhite
+    LoaderDesc.TextSize = 12
+    LoaderDesc.TextTransparency = 0.7
+    
+    local DownFrame = Instance.new('Frame')
+    DownFrame.Name = 'DownFrame'
+    DownFrame.Parent = ContentHolder
+    DownFrame.BackgroundTransparency = 1
+    DownFrame.LayoutOrder = 2
+    DownFrame.BorderSizePixel = 0
+    DownFrame.Size = UDim2.new(1, 0, 0, 230)
+    
+    local DownLayout = Instance.new('UIListLayout')
+    DownLayout.Parent = DownFrame
+    DownLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    DownLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    DownLayout.Padding = UDim.new(0, 10)
+    
+    local MainFrame = Instance.new('Frame')
+    MainFrame.Name = 'MainFrame'
+    MainFrame.Parent = DownFrame
+    MainFrame.BackgroundTransparency = 1
+    MainFrame.BorderSizePixel = 0
+    MainFrame.LayoutOrder = 0
+    MainFrame.Size = UDim2.new(0.85, 0, 0, 160)
+    
+    local MainFrameLayout = Instance.new('UIListLayout')
+    MainFrameLayout.Parent = MainFrame
+    MainFrameLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    MainFrameLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    MainFrameLayout.Padding = UDim.new(0, 10)
+    
+    local KeyBackground = Instance.new('Frame')
+    KeyBackground.Name = 'KeyBackground'
+    KeyBackground.Parent = MainFrame
+    KeyBackground.BackgroundTransparency = 1
+    KeyBackground.BorderSizePixel = 0
+    KeyBackground.LayoutOrder = 0
+    KeyBackground.Size = UDim2.new(1, 0, 0, 40)
+    
+    local KeyBox = Instance.new('Frame')
+    KeyBox.Name = 'KeyBox'
+    KeyBox.Parent = KeyBackground
+    KeyBox.BackgroundColor3 = ArqelUI.Keys.Colors.InputBg
+    KeyBox.BorderSizePixel = 0
+    KeyBox.Size = UDim2.new(1, 0, 1, 0)
+    
+    ArqelUI._keyBox = KeyBox
+    
+    local KeyBoxCorner = Instance.new('UICorner')
+    KeyBoxCorner.CornerRadius = CornerRadius
+    KeyBoxCorner.Parent = KeyBox
+    
+    local KeyBoxStroke = Instance.new('UIStroke')
+    KeyBoxStroke.Parent = KeyBox
+    KeyBoxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    KeyBoxStroke.Color = StrokeDark
+    KeyBoxStroke.Thickness = 1
+    
+    local KeyBoxPadding = Instance.new('UIPadding')
+    KeyBoxPadding.Parent = KeyBox
+    KeyBoxPadding.PaddingLeft = UDim.new(0, 12)
+    KeyBoxPadding.PaddingRight = UDim.new(0, 12)
+    
+    local KeyBoxImage = Instance.new('ImageLabel')
+    KeyBoxImage.Name = 'KeyBoxImage'
+    KeyBoxImage.Parent = KeyBox
+    KeyBoxImage.BackgroundTransparency = 1
+    KeyBoxImage.Position = UDim2.new(0, 0, 0.5, -10)
+    KeyBoxImage.Size = UDim2.new(0, 20, 0, 20)
+    KeyBoxImage.Image = GetIcon("Key")
+    KeyBoxImage.ImageColor3 = IconDim
+    
+    local KeyInput = Instance.new('TextBox')
+    KeyInput.Name = 'KeyInput'
+    KeyInput.Parent = KeyBox
+    KeyInput.BackgroundTransparency = 1
+    KeyInput.Position = UDim2.new(0, 28, 0, 0)
+    KeyInput.Size = UDim2.new(1, -28, 1, 0)
+    KeyInput.Font = Nunito
+    KeyInput.PlaceholderText = "Enter Key..."
+    KeyInput.PlaceholderColor3 = ArqelUI.Keys.Colors.TextPlaceholder
+    KeyInput.Text = ""
+    KeyInput.TextColor3 = TextWhite
+    KeyInput.TextSize = 14
+    KeyInput.TextXAlignment = Enum.TextXAlignment.Left
+    KeyInput.ClearTextOnFocus = false
+    
+    KeyInput.Focused:Connect(function()
+        SafeTween(KeyBoxStroke, TweenFast, {Color = ArqelUI.Keys.Colors.StrokeAccent})
+        SafeTween(KeyBoxImage, TweenFast, {ImageColor3 = ArqelUI.Keys.Colors.StrokeAccent})
     end)
     
-    verifyBtn.MouseLeave:Connect(function()
-        SafeTween(verifyBtn, TweenFast, {
-            BackgroundColor3 = Colors.Crimson
-        })
+    KeyInput.FocusLost:Connect(function()
+        SafeTween(KeyBoxStroke, TweenFast, {Color = StrokeDark})
+        SafeTween(KeyBoxImage, TweenFast, {ImageColor3 = IconDim})
     end)
     
-    -- Verify button click
-    verifyBtn.MouseButton1Click:Connect(function()
-        local inputText = keyInput.Text
+    local GetLicenseButton = Instance.new('TextButton')
+    GetLicenseButton.Name = 'GetLicenseButton'
+    GetLicenseButton.Parent = MainFrame
+    GetLicenseButton.BackgroundColor3 = ButtonStatic
+    GetLicenseButton.BorderSizePixel = 0
+    GetLicenseButton.LayoutOrder = 1
+    GetLicenseButton.Size = UDim2.new(1, 0, 0, 38)
+    GetLicenseButton.Font = Nunito
+    GetLicenseButton.Text = ArqelUI.Keys.Premium and "Discord" or "Get License Key"
+    GetLicenseButton.TextColor3 = TextWhite
+    GetLicenseButton.TextSize = 14
+    GetLicenseButton.AutoButtonColor = false
+    
+    local GetLicenseCorner = Instance.new('UICorner')
+    GetLicenseCorner.CornerRadius = CornerRadius
+    GetLicenseCorner.Parent = GetLicenseButton
+    
+    GetLicenseButton.MouseEnter:Connect(function()
+        SafeTween(GetLicenseButton, TweenFast, {BackgroundColor3 = Color3.fromRGB(60, 60, 60)})
+    end)
+    
+    GetLicenseButton.MouseLeave:Connect(function()
+        SafeTween(GetLicenseButton, TweenFast, {BackgroundColor3 = ButtonStatic})
+    end)
+    
+    GetLicenseButton.MouseButton1Click:Connect(function()
+        local link = ArqelUI.Keys.Premium and ArqelUI.Keys.DiscordLink or ArqelUI.Keys.KeyLink
+        if link and link ~= "" then
+            if setclipboard then setclipboard(link) end
+            ArqelUI.Notify({Title = "Arqel", Description = "Link copied to clipboard!", Duration = 3, Type = "success"})
+        end
+    end)
+    
+    local InitializeButton = Instance.new('TextButton')
+    InitializeButton.Name = 'InitializeButton'
+    InitializeButton.Parent = MainFrame
+    InitializeButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    InitializeButton.BorderSizePixel = 0
+    InitializeButton.LayoutOrder = 2
+    InitializeButton.Size = UDim2.new(1, 0, 0, 42)
+    InitializeButton.Font = GothamBold
+    InitializeButton.Text = "INITIALIZE"
+    InitializeButton.TextColor3 = TextWhite
+    InitializeButton.TextSize = 14
+    InitializeButton.AutoButtonColor = false
+    
+    local InitializeCorner = Instance.new('UICorner')
+    InitializeCorner.CornerRadius = PillRadius
+    InitializeCorner.Parent = InitializeButton
+    
+    local InitializeGradient = Instance.new('UIGradient')
+    InitializeGradient.Parent = InitializeButton
+    InitializeGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, ArqelUI.Keys.Colors.AccentGradient1),
+        ColorSequenceKeypoint.new(1, ArqelUI.Keys.Colors.AccentGradient2)
+    })
+    InitializeGradient.Rotation = 90
+    
+    local GlossyShine = Instance.new('Frame')
+    GlossyShine.Name = 'GlossyShine'
+    GlossyShine.Parent = InitializeButton
+    GlossyShine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    GlossyShine.BackgroundTransparency = 0.85
+    GlossyShine.BorderSizePixel = 0
+    GlossyShine.Size = UDim2.new(1, 0, 0.4, 0)
+    
+    local GlossyCorner = Instance.new('UICorner')
+    GlossyCorner.CornerRadius = PillRadius
+    GlossyCorner.Parent = GlossyShine
+    
+    local GlossyGradient = Instance.new('UIGradient')
+    GlossyGradient.Parent = GlossyShine
+    GlossyGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0),
+        NumberSequenceKeypoint.new(1, 1)
+    })
+    GlossyGradient.Rotation = 90
+    
+    InitializeButton.MouseEnter:Connect(function()
+        SafeTween(InitializeGradient, TweenFast, {Offset = Vector2.new(0.1, 0)})
+    end)
+    
+    InitializeButton.MouseLeave:Connect(function()
+        SafeTween(InitializeGradient, TweenFast, {Offset = Vector2.new(0, 0)})
+    end)
+    
+    InitializeButton.MouseButton1Click:Connect(function()
+        local inputText = KeyInput.Text
         if inputText and inputText ~= "" then
-            self._keyInput = inputText
-            if self._keyFunction then
-                self._keyFunction(inputText)
+            ArqelUI._keyInput = inputText
+            if ArqelUI._keyFunction then
+                ArqelUI._keyFunction(inputText)
             end
         else
-            self:Notify({
-                Title = "Arqel",
-                Description = "Please enter a key",
-                Duration = 3,
-                Type = "warn"
-            })
+            ArqelUI.Notify({Title = "Arqel", Description = "Please enter a key", Duration = 3, Type = "warn"})
         end
     end)
     
-    -- Bottom buttons frame
-    local bottomFrame = Create('Frame', {
-        Name = 'BottomFrame',
-        Parent = content,
-        BackgroundTransparency = 1,
-        LayoutOrder = 6,
-        Size = UDim2.new(1, 0, 0, 30),
-    })
+    local BottomFrame = Instance.new('Frame')
+    BottomFrame.Name = 'BottomFrame'
+    BottomFrame.Parent = DownFrame
+    BottomFrame.BackgroundTransparency = 1
+    BottomFrame.BorderSizePixel = 0
+    BottomFrame.LayoutOrder = 1
+    BottomFrame.Size = UDim2.new(1, 0, 0, 22)
     
-    Create('UIListLayout', {
-        Parent = bottomFrame,
-        FillDirection = Enum.FillDirection.Horizontal,
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        HorizontalAlignment = Enum.HorizontalAlignment.Center,
-        Padding = UDim.new(0, 15),
-    })
+    local BottomLayout = Instance.new('UIListLayout')
+    BottomLayout.Parent = BottomFrame
+    BottomLayout.FillDirection = Enum.FillDirection.Horizontal
+    BottomLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    BottomLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    BottomLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    BottomLayout.Padding = UDim.new(0, 12)
     
-    -- Settings button
-    local settingsBtn = Create('ImageButton', {
-        Name = 'SettingsButton',
-        Parent = bottomFrame,
-        BackgroundTransparency = 1,
-        LayoutOrder = 1,
-        Size = UDim2.new(0, 22, 0, 22),
-        Image = GetIcon("Settings"),
-        ImageColor3 = Colors.IconDim,
-    })
+    local SettingsButton = Instance.new('ImageButton')
+    SettingsButton.Name = 'SettingsButton'
+    SettingsButton.Parent = BottomFrame
+    SettingsButton.BackgroundTransparency = 1
+    SettingsButton.BorderSizePixel = 0
+    SettingsButton.LayoutOrder = 0
+    SettingsButton.Size = UDim2.new(0, 16, 0, 16)
+    SettingsButton.Image = GetIcon("Settings")
+    SettingsButton.ImageColor3 = IconDim
+    SettingsButton.AutoButtonColor = false
     
-    settingsBtn.MouseEnter:Connect(function()
-        SafeTween(settingsBtn, TweenFast, {
-            ImageColor3 = Colors.Crimson
-        })
+    SettingsButton.MouseEnter:Connect(function()
+        SafeTween(SettingsButton, TweenFast, {ImageColor3 = ArqelUI.Keys.Colors.StrokeAccent})
     end)
     
-    settingsBtn.MouseLeave:Connect(function()
-        SafeTween(settingsBtn, TweenFast, {
-            ImageColor3 = Colors.IconDim
-        })
+    SettingsButton.MouseLeave:Connect(function()
+        SafeTween(SettingsButton, TweenFast, {ImageColor3 = IconDim})
     end)
     
-    -- Copy button
-    local copyBtn = Create('ImageButton', {
-        Name = 'CopyButton',
-        Parent = bottomFrame,
-        BackgroundTransparency = 1,
-        LayoutOrder = 2,
-        Size = UDim2.new(0, 22, 0, 22),
-        Image = GetIcon("Copy"),
-        ImageColor3 = Colors.IconDim,
-    })
+    local CopyButton = Instance.new('ImageButton')
+    CopyButton.Name = 'CopyButton'
+    CopyButton.Parent = BottomFrame
+    CopyButton.BackgroundTransparency = 1
+    CopyButton.BorderSizePixel = 0
+    CopyButton.LayoutOrder = 1
+    CopyButton.Size = UDim2.new(0, 16, 0, 16)
+    CopyButton.Image = GetIcon("Copy")
+    CopyButton.ImageColor3 = IconDim
+    CopyButton.AutoButtonColor = false
     
-    copyBtn.MouseEnter:Connect(function()
-        SafeTween(copyBtn, TweenFast, {
-            ImageColor3 = Colors.Crimson
-        })
+    CopyButton.MouseEnter:Connect(function()
+        SafeTween(CopyButton, TweenFast, {ImageColor3 = ArqelUI.Keys.Colors.StrokeAccent})
     end)
     
-    copyBtn.MouseLeave:Connect(function()
-        SafeTween(copyBtn, TweenFast, {
-            ImageColor3 = Colors.IconDim
-        })
+    CopyButton.MouseLeave:Connect(function()
+        SafeTween(CopyButton, TweenFast, {ImageColor3 = IconDim})
     end)
     
-    copyBtn.MouseButton1Click:Connect(function()
-        local link = self.Keys.Premium and self.Keys.DiscordLink or self.Keys.KeyLink
+    CopyButton.MouseButton1Click:Connect(function()
+        local link = ArqelUI.Keys.Premium and ArqelUI.Keys.DiscordLink or ArqelUI.Keys.KeyLink
         if link and link ~= "" and setclipboard then
             setclipboard(link)
-            self:Notify({
-                Title = "Arqel",
-                Description = "Link copied to clipboard",
-                Duration = 2,
-                Type = "success"
-            })
+            ArqelUI.Notify({Title = "Arqel", Description = "Link copied!", Duration = 2, Type = "success"})
         end
     end)
     
-    -- Updates button
-    local updatesBtn = Create('ImageButton', {
-        Name = 'UpdatesButton',
-        Parent = bottomFrame,
-        BackgroundTransparency = 1,
-        LayoutOrder = 3,
-        Size = UDim2.new(0, 22, 0, 22),
-        Image = GetIcon("Refresh"),
-        ImageColor3 = Colors.IconDim,
-    })
+    local UpdatesButton = Instance.new('ImageButton')
+    UpdatesButton.Name = 'UpdatesButton'
+    UpdatesButton.Parent = BottomFrame
+    UpdatesButton.BackgroundTransparency = 1
+    UpdatesButton.BorderSizePixel = 0
+    UpdatesButton.LayoutOrder = 2
+    UpdatesButton.Size = UDim2.new(0, 16, 0, 16)
+    UpdatesButton.Image = GetIcon("Refresh")
+    UpdatesButton.ImageColor3 = IconDim
+    UpdatesButton.AutoButtonColor = false
     
-    updatesBtn.MouseEnter:Connect(function()
-        SafeTween(updatesBtn, TweenFast, {
-            ImageColor3 = Colors.Crimson
-        })
+    UpdatesButton.MouseEnter:Connect(function()
+        SafeTween(UpdatesButton, TweenFast, {ImageColor3 = ArqelUI.Keys.Colors.StrokeAccent})
     end)
     
-    updatesBtn.MouseLeave:Connect(function()
-        SafeTween(updatesBtn, TweenFast, {
-            ImageColor3 = Colors.IconDim
-        })
+    UpdatesButton.MouseLeave:Connect(function()
+        SafeTween(UpdatesButton, TweenFast, {ImageColor3 = IconDim})
     end)
     
-    -- Notifications container
-    local notifContainer = Create('Frame', {
-        Name = 'NotificationsContainer',
-        Parent = screenGui,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(1, -290, 0, 20),
-        Size = UDim2.new(0, 270, 1, -40),
-    })
+    local Notifications = Instance.new('ScreenGui')
+    Notifications.Name = 'Notifications'
+    Notifications.Parent = ScreenGui
+    Notifications.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    Notifications.DisplayOrder = 101
+    Notifications.IgnoreGuiInset = true
     
-    local notifList = Create('Frame', {
-        Name = 'NotificationsList',
-        Parent = notifContainer,
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1, 0, 1, 0),
-    })
+    local NotificationsFrame = Instance.new('Frame')
+    NotificationsFrame.Name = 'NotificationsFrame'
+    NotificationsFrame.Parent = Notifications
+    NotificationsFrame.BackgroundTransparency = 1
+    NotificationsFrame.Position = UDim2.new(1, -280, 0, 20)
+    NotificationsFrame.Size = UDim2.new(0, 270, 1, -40)
     
-    Create('UIListLayout', {
-        Parent = notifList,
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        VerticalAlignment = Enum.VerticalAlignment.Top,
-        Padding = UDim.new(0, 10),
-    })
+    local NotificationsList = Instance.new('Frame')
+    NotificationsList.Name = 'NotificationsList'
+    NotificationsList.Parent = NotificationsFrame
+    NotificationsList.BackgroundTransparency = 1
+    NotificationsList.Size = UDim2.new(1, 0, 1, 0)
     
-    -- Fade in animation
-    SafeTween(background, TweenMedium, {
-        GroupTransparency = 0
-    })
+    local NotificationsLayout = Instance.new('UIListLayout')
+    NotificationsLayout.Parent = NotificationsList
+    NotificationsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    NotificationsLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+    NotificationsLayout.Padding = UDim.new(0, 10)
     
-    -- Scale in animation for loader
-    loader.Size = UDim2.new(0, 0, 0, 0)
-    SafeTween(loader, TweenSlow, {
-        Size = UDim2.new(0, 360, 0, 420)
-    })
+    SafeTween(Background, TweenMedium, {GroupTransparency = 0})
 end
 
 return ArqelUI
